@@ -15,8 +15,14 @@ class Process implements Runnable
         Socket sock = null;
         String path = "";
         String id = "";
+        boolean use_sqr;
+        boolean use_sqr_root;
+        boolean use_sin;
+        boolean use_cos;
+        double constant_lower_bound;
+        double constant_upper_bound;
 
-        public Process (String path, String id)
+        public Process (String path, String id, boolean use_sqr, boolean use_sqr_root, boolean use_sin, boolean use_cos, double constant_lower_bound, double constant_upper_bound)
         {
               try
               {
@@ -24,6 +30,12 @@ class Process implements Runnable
                 sock = new Socket ("127.0.0.1", 8100);
                 this.path = path;
                 this.id = id;
+                this.use_sqr = use_sqr;
+                this.use_sqr_root = use_sqr_root;
+                this.use_sin = use_sin;
+                this.use_cos = use_cos;
+                this.constant_lower_bound = constant_lower_bound;
+                this.constant_upper_bound = constant_upper_bound;
               }
               catch (Exception e){e.printStackTrace();}
         }
@@ -83,7 +95,7 @@ class Process implements Runnable
 		for (int i = 0; i < 100000; i++)
 		{
 			Tree new_tree = new Tree ();
-			new_tree.SetRandomTree(r, input_ids);
+			new_tree.SetRandomTree(r, input_ids, use_sqr, use_sqr_root, use_sin, use_cos, constant_lower_bound, constant_upper_bound);
 			
 			new_tree.CalculateFitness(inputs_training, outputs_training);
 			
@@ -105,7 +117,7 @@ class Process implements Runnable
 			for (int k = 0; k < 2000; k++)
 			{
 				Tree new_tree = new Tree ();
-				new_tree.SetRandomTree(r, input_ids);
+				new_tree.SetRandomTree(r, input_ids, use_sqr, use_sqr_root, use_sin, use_cos, constant_lower_bound, constant_upper_bound);
 				
 				new_tree.CalculateFitness(inputs_training, outputs_training);
 				
@@ -171,9 +183,9 @@ class Process implements Runnable
 				if (associate_dominate[a] < 4.0)
 					new_population.add(old_population.get(a));
 			}
-
-                        //if (i == 1 || i % 100 == 0)
-                        if (i % 10 == 0)
+                        //if (new_population.size() == 0)
+                        //{System.out.println("WTF");}
+                        if (i % 10 == 0 && new_population.size() > 5)
                         {
                                 try
                                 {

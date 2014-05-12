@@ -22,12 +22,17 @@ public class Server
                {
 		Socket sock = ss.accept();
                 BufferedReader br = new BufferedReader (new InputStreamReader (sock.getInputStream()));
-                String[] parameters = br.readLine().tokenize(";");
+                String[] parameters = br.readLine().split(";");
                 String id = parameters[0];
-                String use_sin = parameters[1];
-                String use_cos = parameters[2];
+                boolean use_sqr = parameters[1].toLowerCase().compareTo("true") == 0 ? true : false;
+                boolean use_sqr_root = parameters[2].toLowerCase().compareTo("true") == 0 ? true : false;
+                boolean use_sin = parameters[3].toLowerCase().compareTo("true") == 0 ? true : false;
+                boolean use_cos = parameters[4].toLowerCase().compareTo("true") == 0 ? true : false;
+                double constant_lower_bound = Double.parseDouble(parameters[5].toLowerCase());
+                double constant_upper_bound = Double.parseDouble(parameters[6].toLowerCase());
                 sock.close();
-                Process p = new Process(path + id + ".csv", id);
+
+                Process p = new Process(path + id + ".csv", id, use_sqr, use_sqr_root, use_sin, use_cos, constant_lower_bound, constant_upper_bound);
                 System.out.println(id);
                 new Thread(p).start();
                }

@@ -1,11 +1,14 @@
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Random;
+import java.text.DecimalFormat;
+import java.math.RoundingMode;
+
 
 public class Tree implements Comparable
 {
 	public Node root = null;
-	
+        DecimalFormat df = new DecimalFormat("#.###");	
 	double new_tree_min_func_nodes = 2.0;
 	double new_tree_max_func_nodes = 5.0;
 	
@@ -20,9 +23,13 @@ public class Tree implements Comparable
 	public Tree (Node root)
 	{
 		this.root = root;
+                df.setRoundingMode(RoundingMode.DOWN);
 	}
 	
-	public Tree () {}
+	public Tree () 
+        {
+                df.setRoundingMode(RoundingMode.DOWN);
+        }
 	
 	public void CalculateFitness (ArrayList <HashMap <String, Double>> inputs, ArrayList <Double> outputs)
 	{
@@ -223,7 +230,7 @@ public class Tree implements Comparable
 		}
 	}
 	
-	public void SetRandomTree (Random r, ArrayList <String> input_ids)
+	public void SetRandomTree (Random r, ArrayList <String> input_ids, boolean use_sqr, boolean use_sqr_root, boolean use_sin, boolean use_cos, double constant_lower_bound, double constant_upper_bound)
 	{
 		int num_func = (int)((new_tree_max_func_nodes - new_tree_min_func_nodes)*r.nextDouble() + new_tree_min_func_nodes);
 		
@@ -232,7 +239,7 @@ public class Tree implements Comparable
 		for (int i = 0; i < functions.length; i++)
 		{
 			functions[i] = new Function();
-			functions[i].SetRandomFunction(r);
+			functions[i].SetRandomFunction(r, use_sqr, use_sqr_root, use_sin, use_cos);
 		}
 		
 		root = new Node (functions[0]);
@@ -245,7 +252,7 @@ public class Tree implements Comparable
 		do
 		{
 			Function new_numerical = new Function ();
-			new_numerical.SetRandomNumerical(r, input_ids);
+			new_numerical.SetRandomNumerical(r, input_ids, constant_lower_bound, constant_upper_bound);
 			
 			successful_addition = AddNumericalToTree (root, new Node(new_numerical));
 		}
@@ -268,7 +275,7 @@ public class Tree implements Comparable
 	{
 		switch (cur_node.f.identity)
 		{
-			case Function.CONSTANT: return Double.toString(cur_node.f.constant_value);
+			case Function.CONSTANT: return df.format(cur_node.f.constant_value);
 			case Function.ADDITION: return "(" + GenerateString(cur_node.left) + ")" + " + " + "(" + GenerateString(cur_node.right) + ")";
 			case Function.SUBTRACTION: return "(" + GenerateString(cur_node.left) + ")" + " - " + "(" + GenerateString(cur_node.right) + ")";
 			case Function.MULTIPLICATION: return "(" + GenerateString(cur_node.left) + ")" + " * " + "(" + GenerateString(cur_node.right) + ")";

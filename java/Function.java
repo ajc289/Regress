@@ -37,18 +37,34 @@ public class Function
 		return f;
 	}
 	
-	public void SetRandomFunction (Random r)
+	public void SetRandomFunction (Random r, boolean use_sqr, boolean use_sqr_root, boolean use_sin, boolean use_cos)
 	{
-		identity = (int)(r.nextDouble() * num_function + 1.0);
+                boolean valid_value = true;
+
+                do
+                {
+		        identity = (int)(r.nextDouble() * num_function + 1.0);
+
+                        if (identity == SQUARE && !use_sqr)
+                                valid_value = false;      
+                        else if (identity == SQUAREROOT && !use_sqr_root)
+                                valid_value = false;      
+                        else if (identity == SINE && !use_sin)
+                                valid_value = false;      
+                        else if (identity == COSINE && !use_cos)
+                                valid_value = false;      
+                }
+                while (!valid_value);
 	}
 	
-	public void SetRandomNumerical (Random r, ArrayList <String> input_ids)
+	public void SetRandomNumerical (Random r, ArrayList <String> input_ids, double constant_lower_bound, double constant_upper_bound)
 	{
 		identity = (int)((r.nextDouble() * num_numerical + 1.0)*-1);
 		
 		if (identity == CONSTANT)
 		{
-			constant_value = (r.nextDouble() * 2 * constant_range) - constant_range;
+			//constant_value = (r.nextDouble() * 2 * constant_range) - constant_range;
+			constant_value = r.nextDouble() * (constant_upper_bound - constant_lower_bound) + constant_lower_bound;
 		}
 		else if (identity == DATA)
 		{
