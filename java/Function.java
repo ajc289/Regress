@@ -63,7 +63,6 @@ public class Function
 		
 		if (identity == CONSTANT)
 		{
-			//constant_value = (r.nextDouble() * 2 * constant_range) - constant_range;
 			constant_value = r.nextDouble() * (constant_upper_bound - constant_lower_bound) + constant_lower_bound;
 		}
 		else if (identity == DATA)

@@ -109,9 +109,6 @@ class Process implements Runnable
 		
 		for (int i = 0; i < 5000; i++)
 		{
-			//if (i % 100 == 0)
-				//System.out.println (i);
-			
 			Tree[] best_new = new Tree[100];
 			
 			for (int k = 0; k < 2000; k++)
@@ -122,7 +119,6 @@ class Process implements Runnable
 				new_tree.CalculateFitness(inputs_training, outputs_training);
 				
 				new_population.add(new_tree);
-				//best_new.add(new_tree);
 				for (int a = 0; a < best_new.length; a++)
 				{
 					if (best_new[a] == null)
@@ -183,8 +179,6 @@ class Process implements Runnable
 				if (associate_dominate[a] < 4.0)
 					new_population.add(old_population.get(a));
 			}
-                        //if (new_population.size() == 0)
-                        //{System.out.println("WTF");}
                         if (i % 10 == 0 && new_population.size() > 5)
                         {
                                 try
@@ -205,10 +199,6 @@ class Process implements Runnable
 			
 		}
 		
-		//Collections.sort(new_population);
-		
-		//for (int i = 0; i < 5; i++)
-			//System.out.println (new_population.get(i).fitness + " " + new_population.get(i).toString());
 	}
 	
 }
